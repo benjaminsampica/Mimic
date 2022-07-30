@@ -1,0 +1,22 @@
+﻿@page "/"
+
+@if(_result is null)
+{
+    <MudAlert Severity="Severity.Info">
+        There's no items yet! Go add some.
+    </MudAlert>
+}
+else
+{
+    <MudExpansionPanels>
+        @foreach(var item in _result.Items)
+        {
+            <MudExpansionPanel Text="@item.Summary">
+                Panel One Content
+            </MudExpansionPanel>
+        }
+    </MudExpansionPanels>
+   
+}
+
+
