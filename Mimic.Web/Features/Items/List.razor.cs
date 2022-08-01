@@ -7,10 +7,17 @@ public partial class List : IDisposable
     [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
 
     private readonly CancellationTokenSource _cts = new();
+    private bool _showAddForm = false;
     private ListItemResponse? _result;
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        _result = null;
         var items = await ItemRepository.GetAllAsync(_cts.Token);
 
         if (!items.Any()) return;
@@ -28,6 +35,12 @@ public partial class List : IDisposable
         }
 
         _result = result;
+    }
+
+    private async Task DeleteAsync(string id)
+    {
+        await ItemRepository.RemoveAsync(id, _cts.Token);
+        await LoadDataAsync();
     }
 
     public void Dispose()

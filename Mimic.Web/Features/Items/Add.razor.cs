@@ -4,7 +4,10 @@ public partial class Add : IDisposable
 {
     [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
 
-    private readonly AddItemRequest _form = new();
+    [Parameter, EditorRequired] public bool Show { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnSuccessfulSubmit { get; set; }
+
+    private AddItemRequest _form = new();
     private readonly CancellationTokenSource _cts = new();
 
     private async Task OnSubmit()
@@ -15,11 +18,16 @@ public partial class Add : IDisposable
         };
 
         await ItemRepository.AddAsync(item, _cts.Token);
+
+        await OnSuccessfulSubmit.InvokeAsync();
+
+        _form = new();
     }
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }
 
