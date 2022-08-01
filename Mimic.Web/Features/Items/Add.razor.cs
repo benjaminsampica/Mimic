@@ -1,17 +1,20 @@
-﻿namespace Mimic.Web.Features.Items;
+﻿using Blazored.TextEditor;
+
+namespace Mimic.Web.Features.Items;
 
 public partial class Add : IDisposable
 {
     [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
 
-    [Parameter, EditorRequired] public bool Show { get; set; }
     [Parameter, EditorRequired] public EventCallback OnSuccessfulSubmit { get; set; }
 
+    private BlazoredTextEditor _quillHtml;
     private AddItemRequest _form = new();
     private readonly CancellationTokenSource _cts = new();
 
     private async Task OnSubmit()
     {
+        var content = await _quillHtml.GetHTML();
         var item = new Item
         {
             Summary = _form.Summary

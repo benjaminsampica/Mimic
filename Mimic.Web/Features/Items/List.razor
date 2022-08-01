@@ -5,7 +5,10 @@
         <MudText Align="Align.Center" Typo="Typo.h1">
             Items <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="() => _showAddForm = !_showAddForm"/>
         </MudText>
-        <Add Show=_showAddForm OnSuccessfulSubmit=LoadDataAsync/>
+        @if(_showAddForm)
+        {
+            <Add OnSuccessfulSubmit=LoadDataAsync/>
+        }
     </MudItem>
     <MudItem xs="12">
         @if(_result is null)
