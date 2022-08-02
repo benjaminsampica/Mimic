@@ -1,11 +1,15 @@
-﻿<EditForm Model="@_form" OnSubmit="OnSubmit">
-    <DataAnnotationsValidator/>
+﻿<EditForm OnSubmit="OnSubmit" Model="_form">
+    <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
-                    <MudTextField Label="Summary" @bind-Value="_form.Summary" For="() => _form.Summary"/>
-                    <BlazoredTextEditor @ref="@_quillHtml">
+                    <MudTextField Label="@nameof(_form.Topic)" @bind-Value="_form.Topic" For="() => _form.Topic"/>
+                    <br/>
+                    <MudInputLabel>
+                        @nameof(_form.Body)
+                    </MudInputLabel>
+                    <BlazoredTextEditor @ref="@_quillHtml" Placeholder="Enter a topic body...">
                         <ToolbarContent>
                             <select class="ql-header">
                                 <option selected=""></option>
@@ -33,13 +37,14 @@
                                 <button class="ql-link"></button>
                             </span>
                         </ToolbarContent>
-                        <EditorContent>
-
-                        </EditorContent>
+                        <EditorContent></EditorContent>
                     </BlazoredTextEditor>
+                    <div class="mud-input-helper-text mud-input-error">
+                        <ValidationMessage For="() => _form.Body"/>
+                    </div>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" StartIcon="@Icons.Outlined.Check">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Outlined.Check">
                         Add
                     </MudButton>
                 </MudCardActions>

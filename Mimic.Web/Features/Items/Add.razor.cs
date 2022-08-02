@@ -1,4 +1,7 @@
 ﻿using Blazored.TextEditor;
+using Microsoft.AspNetCore.Components.Forms;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Mimic.Web.Features.Items;
 
@@ -8,23 +11,30 @@ public partial class Add : IDisposable
 
     [Parameter, EditorRequired] public EventCallback OnSuccessfulSubmit { get; set; }
 
-    private BlazoredTextEditor _quillHtml;
+    private BlazoredTextEditor _quillHtml = null!;
     private AddItemRequest _form = new();
     private readonly CancellationTokenSource _cts = new();
 
-    private async Task OnSubmit()
+    private async Task OnSubmit(EditContext context)
     {
-        var content = await _quillHtml.GetHTML();
-        var item = new Item
+        var body = await _quillHtml.GetHTML();
+        // Strip out any html tags since by default the input puts in a blank paragraph tag.
+        _form.Body = Regex.Replace(body, "<.*?>", string.Empty);
+
+        if (context.Validate())
         {
-            Summary = _form.Summary
-        };
+            var item = new Item
+            {
+                Topic = _form.Topic,
+                Body = body
+            };
 
-        await ItemRepository.AddAsync(item, _cts.Token);
+            await ItemRepository.AddAsync(item, _cts.Token);
 
-        await OnSuccessfulSubmit.InvokeAsync();
+            await OnSuccessfulSubmit.InvokeAsync();
 
-        _form = new();
+            _form = new();
+        }
     }
 
     public void Dispose()
@@ -36,5 +46,8 @@ public partial class Add : IDisposable
 
 public class AddItemRequest
 {
-    public string Summary { get; set; }
+    [Required]
+    public string Topic { get; set; }
+    [Required]
+    public string Body { get; set; }
 }
