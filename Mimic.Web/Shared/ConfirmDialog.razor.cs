@@ -1,6 +1,4 @@
-﻿using MudBlazor;
-
-namespace Mimic.Web.Shared;
+﻿namespace Mimic.Web.Shared;
 
 public partial class ConfirmDialog
 {

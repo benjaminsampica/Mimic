@@ -1,10 +1,17 @@
 ﻿@page "/"
 
 <MudGrid>
-    <MudItem xs="12">
-        <MudText Align="Align.Center" Typo="Typo.h1">
-            Topics <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="() => _showAddForm = !_showAddForm"/>
+    <MudItem md="6" xs=12>
+        <MudText Typo="Typo.h1">
+            Topics <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="() => _showAddForm = !_showAddForm" Class="mr-2"/>
         </MudText>
+    </MudItem>
+    <MudItem md=6 xs=12 Class="d-flex justify-end align-center">
+        <Export />
+        <span class="ml-2" />
+        <Import OnImportSuccess="LoadDataAsync"/>
+    </MudItem>
+    <MudItem xs=12>
         @if(_showAddForm)
         {
             <Add OnSuccessfulSubmit=OnSuccessfulAddAsync/>
@@ -21,7 +28,7 @@
         {
             <MudTable Dense=true Items=_result.Items Outlined=false Bordered=false>
                 <HeaderContent>
-                    <MudTh Style="width: 15%;">
+                    <MudTh Style="width: 20%;">
                         Actions
                     </MudTh>
                     <MudTh>

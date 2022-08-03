@@ -1,6 +1,4 @@
-﻿using Mimic.Web.Infrastructure.Models;
-
-namespace Mimic.Web.Infrastructure;
+﻿namespace Mimic.Web.Infrastructure;
 
 public interface IRepository<T> where T : IEntity
 {

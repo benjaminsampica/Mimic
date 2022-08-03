@@ -1,6 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using Mimic.Web.Shared;
-using MudBlazor;
 using static Mimic.Web.Features.Topics.ListItemResponse;
 
 namespace Mimic.Web.Features.Topics;
@@ -56,17 +54,6 @@ public partial class List : IDisposable
         }
 
         _result = result;
-    }
-
-    private async Task ExportDataAsync()
-    {
-        var items = await ItemRepository.GetAllAsync(_cts.Token);
-
-        if (!items.Any())
-        {
-            Snackbar.Add("No topics are yet added to export.", Severity.Warning);
-            return;
-        }
     }
 
     private async Task RemoveAsync(string id)
