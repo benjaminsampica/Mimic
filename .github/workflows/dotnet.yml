@@ -1,0 +1,32 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**/README.md'
+
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Install WASM
+      run: dotnet workload install wasm-tools 
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish -c Release -o 'drop'
+    - name: Commit wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.4.0
+      with:
+        folder: drop/wwwroot
+    
