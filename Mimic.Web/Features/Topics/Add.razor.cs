@@ -14,7 +14,8 @@ public partial class Add : IDisposable
         var topic = new Topic
         {
             Body = request.Body,
-            Name = request.Topic
+            Name = request.Topic,
+            Tags = request.FormattedTags
         };
 
         await TopicRepository.AddAsync(topic, _cts.Token);

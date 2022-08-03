@@ -45,5 +45,8 @@ public class AddEditTopicRequest
     public string Topic { get; set; }
     [Required]
     public string Body { get; set; }
+    public string Tags { get; set; }
+
+    public string[] FormattedTags => Tags.Split(",");
 }
 

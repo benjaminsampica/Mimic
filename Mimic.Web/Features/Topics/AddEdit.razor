@@ -5,6 +5,7 @@
             <MudCard>
                 <MudCardContent>
                     <MudTextField Label="@nameof(Model.Topic)" @bind-Value="Model.Topic" For="() => Model.Topic"/>
+                    <MudTextField Label="@nameof(Model.Tags)" @bind-Value="Model.Tags" For="() => Model.Tags" HelperText="Each tag must be comma (,) separated."/>
                     <br/>
                     <MudInputLabel>
                         @nameof(Model.Body)

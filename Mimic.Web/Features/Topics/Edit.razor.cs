@@ -16,6 +16,7 @@ public partial class Edit : IDisposable
         var topic = (await TopicRepository.FindAsync(Id, _cts.Token))!;
         _form.Topic = topic.Name;
         _form.Body = topic.Body;
+        _form.Tags = string.Join(",", topic.Tags);
     }
 
     private async Task OnSubmitAsync(AddEditTopicRequest request)
@@ -23,6 +24,7 @@ public partial class Edit : IDisposable
         var topic = (await TopicRepository.FindAsync(Id, _cts.Token))!;
         topic.Name = request.Topic;
         topic.Body = request.Body;
+        topic.Tags = request.FormattedTags;
 
         await TopicRepository.RemoveAsync(Id, _cts.Token);
         await TopicRepository.AddAsync(topic, _cts.Token);

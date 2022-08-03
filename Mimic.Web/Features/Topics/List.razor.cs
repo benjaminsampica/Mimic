@@ -47,7 +47,8 @@ public partial class List : IDisposable
             var itemResult = new ItemResponse
             {
                 Id = item.Id,
-                Topic = item.Name
+                Summary = item.Name,
+                Tags = item.Tags
             };
 
             result.Items.Add(itemResult);
@@ -81,7 +82,8 @@ public class ListItemResponse
     public class ItemResponse
     {
         public string Id { get; set; } = null!;
-        public string Topic { get; set; } = null!;
+        public string Summary { get; set; } = null!;
+        public string[] Tags { get; set; } = null!;
         public bool ShowDetails { get; set; }
     }
 }
