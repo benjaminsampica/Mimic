@@ -25,8 +25,8 @@ jobs:
       run: dotnet restore
     - name: Publish
       run: dotnet publish -c Release -o 'drop'
-    - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@4.4.0
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.4.0
       with:
         folder: drop/wwwroot
     
