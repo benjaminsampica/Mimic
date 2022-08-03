@@ -31,7 +31,7 @@
                 <RowTemplate>
                     <MudTd>
                         <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details" OnClick="() => context.ShowDetails = !context.ShowDetails"/>
-                        <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body"/>
+                        <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body" OnClick="() => OnCopyClickAsync(context.Id)"/>
                         <MudIconButton Color=Color.Error Icon=@Icons.Outlined.Delete Variant=Variant.Filled OnClick="() => RemoveAsync(context.Id)" Title="Delete Topic"/>
                     </MudTd>
                     <MudTd>

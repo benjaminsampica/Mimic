@@ -1,4 +1,5 @@
-﻿using Mimic.Web.Shared;
+﻿using Microsoft.JSInterop;
+using Mimic.Web.Shared;
 using MudBlazor;
 using static Mimic.Web.Features.Items.ListItemResponse;
 
@@ -9,6 +10,7 @@ public partial class List : IDisposable
     [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
     [Inject] private IConfirmDialogService ConfirmDialogService { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
+    [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 
     private readonly CancellationTokenSource _cts = new();
     private bool _showAddForm = false;
@@ -23,6 +25,15 @@ public partial class List : IDisposable
     {
         _showAddForm = false;
         await LoadDataAsync();
+    }
+
+    private async Task OnCopyClickAsync(string id)
+    {
+        var item = await ItemRepository.FindAsync(id, _cts.Token);
+
+        Snackbar.Add("Copied topic body into clipboard.", Severity.Info);
+
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", item!.Body);
     }
 
     private async Task LoadDataAsync()
