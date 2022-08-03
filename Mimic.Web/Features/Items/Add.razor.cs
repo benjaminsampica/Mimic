@@ -11,22 +11,19 @@ public partial class Add : IDisposable
 
     private readonly CancellationTokenSource _cts = new();
 
-    private async Task OnSubmitAsync(AddEditItemRequestAttempt attempt)
+    private async Task OnSubmitAsync(AddEditItemRequest request)
     {
-        if (attempt.IsValid)
+        var item = new Item
         {
-            var item = new Item
-            {
-                Body = attempt.Model.Body,
-                Topic = attempt.Model.Topic
-            };
+            Body = request.Body,
+            Topic = request.Topic
+        };
 
-            await ItemRepository.AddAsync(item, _cts.Token);
+        await ItemRepository.AddAsync(item, _cts.Token);
 
-            Snackbar.Add("Successfully added item!", Severity.Success);
+        Snackbar.Add("Successfully added item!", Severity.Success);
 
-            await OnSuccessfulSubmit.InvokeAsync();
-        }
+        await OnSuccessfulSubmit.InvokeAsync();
     }
 
     public void Dispose()

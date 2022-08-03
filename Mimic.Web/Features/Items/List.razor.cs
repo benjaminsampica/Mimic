@@ -1,10 +1,14 @@
-﻿using static Mimic.Web.Features.Items.ListItemResponse;
+﻿using Mimic.Web.Shared;
+using MudBlazor;
+using static Mimic.Web.Features.Items.ListItemResponse;
 
 namespace Mimic.Web.Features.Items;
 
 public partial class List : IDisposable
 {
     [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
+    [Inject] private IConfirmDialogService ConfirmDialogService { get; set; } = null!;
+    [Inject] private ISnackbar Snackbar { get; set; } = null!;
 
     private readonly CancellationTokenSource _cts = new();
     private bool _showAddForm = false;
@@ -12,6 +16,12 @@ public partial class List : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadDataAsync();
+    }
+
+    private async Task OnSuccessfulAddAsync()
+    {
+        _showAddForm = false;
         await LoadDataAsync();
     }
 
@@ -38,9 +48,14 @@ public partial class List : IDisposable
         _result = result;
     }
 
-    private async Task DeleteAsync(string id)
+    private async Task RemoveAsync(string id)
     {
+        if (await ConfirmDialogService.IsCancelledAsync()) return;
+
         await ItemRepository.RemoveAsync(id, _cts.Token);
+
+        Snackbar.Add("Successfully removed item!", Severity.Success);
+
         await LoadDataAsync();
     }
 

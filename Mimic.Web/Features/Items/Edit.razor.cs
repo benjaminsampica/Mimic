@@ -20,21 +20,18 @@ public partial class Edit : IDisposable
         _form.Body = item.Body;
     }
 
-    private async Task OnSubmitAsync(AddEditItemRequestAttempt attempt)
+    private async Task OnSubmitAsync(AddEditItemRequest request)
     {
-        if (attempt.IsValid)
-        {
-            var item = (await ItemRepository.FindAsync(Id, _cts.Token))!;
-            item.Topic = attempt.Model.Topic;
-            item.Body = attempt.Model.Body;
+        var item = (await ItemRepository.FindAsync(Id, _cts.Token))!;
+        item.Topic = request.Topic;
+        item.Body = request.Body;
 
-            await ItemRepository.RemoveAsync(Id, _cts.Token);
-            await ItemRepository.AddAsync(item, _cts.Token);
+        await ItemRepository.RemoveAsync(Id, _cts.Token);
+        await ItemRepository.AddAsync(item, _cts.Token);
 
-            Snackbar.Add("Successfully edited item!", Severity.Success);
+        Snackbar.Add("Successfully edited item!", Severity.Success);
 
-            await OnSuccessfulSubmit.InvokeAsync();
-        }
+        await OnSuccessfulSubmit.InvokeAsync();
     }
 
     public void Dispose()

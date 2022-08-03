@@ -7,12 +7,17 @@ namespace Mimic.Web.Features.Items;
 
 public partial class AddEdit
 {
-    [Parameter, EditorRequired] public EventCallback<AddEditItemRequestAttempt> OnSubmit { get; set; }
+    [Parameter, EditorRequired] public EventCallback<AddEditItemRequest> OnValidSubmit { get; set; }
     [Parameter, EditorRequired] public AddEditItemRequest Model { get; set; } = null!;
 
     private BlazoredTextEditor _quillHtml = null!;
 
     private readonly CancellationTokenSource _cts = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await _quillHtml.LoadHTMLContent(Model.Body);
+    }
 
     private async Task OnSubmitAsync(EditContext context)
     {
@@ -20,13 +25,11 @@ public partial class AddEdit
         // Strip out any html tags since by default the input puts in a blank paragraph tag.
         Model.Body = Regex.Replace(body, "<.*?>", string.Empty);
 
-        var attempt = new AddEditItemRequestAttempt
+        if (context.Validate())
         {
-            Model = Model,
-            IsValid = context.Validate()
-        };
-
-        await OnSubmit.InvokeAsync(attempt);
+            Model.Body = body;
+            await OnValidSubmit.InvokeAsync(Model);
+        }
     }
 
     public void Dispose()
@@ -34,12 +37,6 @@ public partial class AddEdit
         _cts.Cancel();
         _cts.Dispose();
     }
-}
-
-public class AddEditItemRequestAttempt
-{
-    public bool IsValid { get; set; }
-    public AddEditItemRequest Model { get; set; } = new();
 }
 
 public class AddEditItemRequest
