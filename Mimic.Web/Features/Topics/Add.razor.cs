@@ -1,25 +1,25 @@
 ﻿using MudBlazor;
 
-namespace Mimic.Web.Features.Items;
+namespace Mimic.Web.Features.Topics;
 
 public partial class Add : IDisposable
 {
-    [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
+    [Inject] private IRepository<Topic> TopicRepository { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
 
     [Parameter, EditorRequired] public EventCallback OnSuccessfulSubmit { get; set; }
 
     private readonly CancellationTokenSource _cts = new();
 
-    private async Task OnSubmitAsync(AddEditItemRequest request)
+    private async Task OnSubmitAsync(AddEditTopicRequest request)
     {
-        var item = new Item
+        var topic = new Topic
         {
             Body = request.Body,
-            Topic = request.Topic
+            Name = request.Topic
         };
 
-        await ItemRepository.AddAsync(item, _cts.Token);
+        await TopicRepository.AddAsync(topic, _cts.Token);
 
         Snackbar.Add("Successfully added item!", Severity.Success);
 

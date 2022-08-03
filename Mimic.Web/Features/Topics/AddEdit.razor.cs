@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Components.Forms;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace Mimic.Web.Features.Items;
+namespace Mimic.Web.Features.Topics;
 
 public partial class AddEdit
 {
-    [Parameter, EditorRequired] public EventCallback<AddEditItemRequest> OnValidSubmit { get; set; }
-    [Parameter, EditorRequired] public AddEditItemRequest Model { get; set; } = null!;
+    [Parameter, EditorRequired] public EventCallback<AddEditTopicRequest> OnValidSubmit { get; set; }
+    [Parameter, EditorRequired] public AddEditTopicRequest Model { get; set; } = null!;
 
     private BlazoredTextEditor _quillHtml = null!;
 
@@ -39,7 +39,7 @@ public partial class AddEdit
     }
 }
 
-public class AddEditItemRequest
+public class AddEditTopicRequest
 {
     [Required]
     public string Topic { get; set; }

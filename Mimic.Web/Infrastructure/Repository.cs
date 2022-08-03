@@ -22,16 +22,16 @@ public class Repository<T> : IRepository<T> where T : IEntity
 
         var relevantKeys = allKeys.Where(k => k.Contains(typeof(T).Name)).ToList();
 
-        var allItemsTasks = new List<Task<T>>();
+        var allTopicsTasks = new List<Task<T>>();
         foreach (var key in relevantKeys)
         {
             var entityTask = _localStorageService.GetItemAsync<T>(key, cancellationToken).AsTask();
-            allItemsTasks.Add(entityTask);
+            allTopicsTasks.Add(entityTask);
         }
 
-        var allItems = await Task.WhenAll(allItemsTasks);
+        var allTopics = await Task.WhenAll(allTopicsTasks);
 
-        return allItems;
+        return allTopics;
     }
 
     public async ValueTask AddAsync(T entity, CancellationToken cancellationToken)

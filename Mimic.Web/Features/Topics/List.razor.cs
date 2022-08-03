@@ -1,13 +1,13 @@
 ﻿using Microsoft.JSInterop;
 using Mimic.Web.Shared;
 using MudBlazor;
-using static Mimic.Web.Features.Items.ListItemResponse;
+using static Mimic.Web.Features.Topics.ListItemResponse;
 
-namespace Mimic.Web.Features.Items;
+namespace Mimic.Web.Features.Topics;
 
 public partial class List : IDisposable
 {
-    [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
+    [Inject] private IRepository<Topic> ItemRepository { get; set; } = null!;
     [Inject] private IConfirmDialogService ConfirmDialogService { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
@@ -49,14 +49,24 @@ public partial class List : IDisposable
             var itemResult = new ItemResponse
             {
                 Id = item.Id,
-                Topic = item.Topic,
-                Body = item.Body
+                Topic = item.Name
             };
 
             result.Items.Add(itemResult);
         }
 
         _result = result;
+    }
+
+    private async Task ExportDataAsync()
+    {
+        var items = await ItemRepository.GetAllAsync(_cts.Token);
+
+        if (!items.Any())
+        {
+            Snackbar.Add("No topics are yet added to export.", Severity.Warning);
+            return;
+        }
     }
 
     private async Task RemoveAsync(string id)
@@ -85,7 +95,6 @@ public class ListItemResponse
     {
         public string Id { get; set; } = null!;
         public string Topic { get; set; } = null!;
-        public string Body { get; set; } = null!;
         public bool ShowDetails { get; set; }
     }
 }
