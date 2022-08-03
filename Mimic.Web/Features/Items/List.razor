@@ -30,7 +30,7 @@
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd>
-                        <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details"/>
+                        <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details" OnClick="() => context.ShowDetails = !context.ShowDetails"/>
                         <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body"/>
                         <MudIconButton Color=Color.Error Icon=@Icons.Outlined.Delete Variant=Variant.Filled OnClick="() => DeleteAsync(context.Id)" Title="Delete Topic"/>
                     </MudTd>
@@ -38,6 +38,16 @@
                         @context.Topic
                     </MudTd>
                 </RowTemplate>
+                <ChildRowContent>
+                    @if(context.ShowDetails)
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <Edit Id="@context.Id" OnSuccessfulSubmit="LoadDataAsync"/>
+                            </td>
+                        </tr>
+                    }
+                </ChildRowContent>
             </MudTable>
         }
     </MudItem>

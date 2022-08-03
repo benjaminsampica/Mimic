@@ -4,7 +4,7 @@ namespace Mimic.Web.Features.Items;
 
 public partial class List : IDisposable
 {
-    [Inject] private IRepository<Topic> ItemRepository { get; set; } = null!;
+    [Inject] private IRepository<Item> ItemRepository { get; set; } = null!;
 
     private readonly CancellationTokenSource _cts = new();
     private bool _showAddForm = false;
@@ -60,5 +60,6 @@ public class ListItemResponse
         public string Id { get; set; } = null!;
         public string Topic { get; set; } = null!;
         public string Body { get; set; } = null!;
+        public bool ShowDetails { get; set; }
     }
 }

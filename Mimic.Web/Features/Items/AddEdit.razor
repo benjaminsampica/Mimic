@@ -1,13 +1,13 @@
-﻿<EditForm OnSubmit="OnSubmitAsync" Model="_form">
+﻿<EditForm OnSubmit="OnSubmitAsync" Model="Model">
     <DataAnnotationsValidator />
     <MudGrid>
-        <MudItem xs="12" sm="7">
+        <MudItem xs="12">
             <MudCard>
                 <MudCardContent>
-                    <MudTextField Label="@nameof(_form.Topic)" @bind-Value="_form.Topic" For="() => _form.Topic"/>
+                    <MudTextField Label="@nameof(Model.Topic)" @bind-Value="Model.Topic" For="() => Model.Topic"/>
                     <br/>
                     <MudInputLabel>
-                        @nameof(_form.Body)
+                        @nameof(Model.Body)
                     </MudInputLabel>
                     <BlazoredTextEditor @ref="@_quillHtml" Placeholder="Enter a topic body...">
                         <ToolbarContent>
@@ -40,7 +40,7 @@
                         <EditorContent></EditorContent>
                     </BlazoredTextEditor>
                     <div class="mud-input-helper-text mud-input-error">
-                        <ValidationMessage For="() => _form.Body"/>
+                        <ValidationMessage For="() => Model.Body"/>
                     </div>
                 </MudCardContent>
                 <MudCardActions>
