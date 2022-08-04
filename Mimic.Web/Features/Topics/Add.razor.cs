@@ -20,7 +20,7 @@ public partial class Add : IDisposable
 
         await TopicRepository.AddAsync(topic, _cts.Token);
 
-        Snackbar.Add("Successfully added item!", Severity.Success);
+        Snackbar.Add("Successfully added topic!", Severity.Success);
 
         await OnSuccessfulSubmit.InvokeAsync();
     }
