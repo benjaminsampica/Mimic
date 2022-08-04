@@ -45,7 +45,7 @@ public class AddEditTopicRequest
     public string Summary { get; set; }
     [Required]
     public string Body { get; set; }
-    public string Tags { get; set; }
+    public string? Tags { get; set; }
 
     public string[]? FormattedTags => !string.IsNullOrEmpty(Tags) ? Tags.Split(",") : null;
 }
