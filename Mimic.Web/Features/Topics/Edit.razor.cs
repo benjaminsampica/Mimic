@@ -14,7 +14,7 @@ public partial class Edit : IDisposable
     protected override async Task OnInitializedAsync()
     {
         var topic = (await TopicRepository.FindAsync(Id, _cts.Token))!;
-        _form.Topic = topic.Name;
+        _form.Summary = topic.Summary;
         _form.Body = topic.Body;
         _form.Tags = string.Join(",", topic.Tags);
     }
@@ -22,7 +22,7 @@ public partial class Edit : IDisposable
     private async Task OnSubmitAsync(AddEditTopicRequest request)
     {
         var topic = (await TopicRepository.FindAsync(Id, _cts.Token))!;
-        topic.Name = request.Topic;
+        topic.Summary = request.Summary;
         topic.Body = request.Body;
         topic.Tags = request.FormattedTags;
 
