@@ -14,9 +14,12 @@ public partial class AddEdit
 
     private readonly CancellationTokenSource _cts = new();
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await _quillHtml.LoadHTMLContent(Model.Body);
+        if (!string.IsNullOrEmpty(Model.Body))
+        {
+            await _quillHtml.LoadHTMLContent(Model.Body);
+        }
     }
 
     private async Task OnSubmitAsync(EditContext context)

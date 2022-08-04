@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using static Mimic.Web.Features.Topics.TopicListResponse
 
 <MudGrid>
     <MudItem md="6" xs=12>
@@ -6,9 +7,8 @@
             Topics <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="() => _showAddForm = !_showAddForm" Class="mr-2"/>
         </MudText>
     </MudItem>
-    <MudItem md=6 xs=12 Class="d-flex justify-end align-center">
+    <MudItem md=6 xs=12 Class="d-flex justify-end align-center gap-2">
         <Export />
-        <span class="ml-2" />
         <Import OnImportSuccess="LoadDataAsync"/>
     </MudItem>
     <MudItem xs=12>
@@ -26,46 +26,54 @@
         }
         else
         {
-            <MudTable Dense=true Items=_result.Topics Outlined=false Bordered=false>
-                <HeaderContent>
-                    <MudTh Style="width: 20%;">
-                        Actions
-                    </MudTh>
-                    <MudTh>
-                        Summary
-                    </MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd>
-                        <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details" OnClick="() => context.ShowDetails = !context.ShowDetails"/>
-                        <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body" OnClick="() => OnCopyClickAsync(context.Id)"/>
-                        <MudIconButton Color=Color.Error Icon=@Icons.Outlined.Delete Variant=Variant.Filled OnClick="() => RemoveAsync(context.Id)" Title="Delete Topic"/>
-                    </MudTd>
-                    <MudTd>
-                        <div>
-                            @context.Summary
-                        </div>
-                        <div>
-                            @foreach (var tag in context.Tags)
+            <MudDropContainer T="TopicResponse" Items="@_result.Topics" ItemsSelector="@((item, dropzone) => true)" ItemDropped="OrderUpdatedAsync" @ref=_topicDropContainer>
+		        <ChildContent>
+                    <MudGrid>
+                        <MudItem xs="2">
+                            <MudText Typo="Typo.h6">
+                                Actions
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="10">
+                            <MudText Typo="Typo.h6">
+                                Summary
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudDropZone T="TopicResponse" Identifier="1" Class="flex-grow-1" AllowReorder="true" />
+                        </MudItem>
+                    </MudGrid>
+		        </ChildContent>
+		        <ItemRenderer>
+                    <MudPaper Class="pa-2 my-2">
+                        <MudGrid>
+                            <MudItem xs="2">
+                                <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details" OnClick="() => OnDetailsClick(context)"/>
+                                <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body" OnClick="() => OnCopyClickAsync(context.Id)"/>
+                                <MudIconButton Color=Color.Error Icon=@Icons.Outlined.Delete Variant=Variant.Filled OnClick="() => OnRemoveClickAsync(context.Id)" Title="Delete Topic"/>
+                            </MudItem>
+                            <MudItem xs="10" Class="d-flex align-center">
+                                @context.Summary
+                                @foreach (var tag in context.Tags)
+                                {
+                                    <MudChip Color=Color.Info Size=Size.Small>
+                                        @tag
+                                    </MudChip>
+                                }
+                                <MudSpacer />
+                                <MudIcon Icon="@Icons.Filled.DragIndicator" Size="Size.Large" Color="Color.Dark"/>
+                            </MudItem>
+                            @if(context.ShowDetails)
                             {
-                                <MudChip Color=Color.Info Size=Size.Small>
-                                    @tag
-                                </MudChip>
+                                <MudItem xs="12">
+                                    <Edit Id="@context.Id" OnSuccessfulSubmit="LoadDataAsync"/>
+                                </MudItem>
                             }
-                        </div>
-                    </MudTd>
-                </RowTemplate>
-                <ChildRowContent>
-                    @if(context.ShowDetails)
-                    {
-                        <tr>
-                            <td colspan="2">
-                                <Edit Id="@context.Id" OnSuccessfulSubmit="LoadDataAsync"/>
-                            </td>
-                        </tr>
-                    }
-                </ChildRowContent>
-            </MudTable>
+                        </MudGrid>
+                    </MudPaper>
+
+		        </ItemRenderer>
+	        </MudDropContainer>
         }
     </MudItem>
 </MudGrid>
