@@ -14,7 +14,7 @@ public partial class Add : IDisposable
         var topic = new Topic
         {
             Body = request.Body,
-            Name = request.Topic,
+            Summary = request.Summary,
             Tags = request.FormattedTags
         };
 
