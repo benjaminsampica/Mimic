@@ -42,11 +42,11 @@ public partial class AddEdit
 public class AddEditTopicRequest
 {
     [Required]
-    public string Summary { get; set; }
+    public string Summary { get; set; } = null!;
     [Required]
-    public string Body { get; set; }
+    public string Body { get; set; } = null!;
     public string? Tags { get; set; }
 
-    public string[]? FormattedTags => !string.IsNullOrEmpty(Tags) ? Tags.Split(",") : null;
+    public IEnumerable<string> FormattedTags => !string.IsNullOrEmpty(Tags) ? Tags.Split(",") : Array.Empty<string>();
 }
 

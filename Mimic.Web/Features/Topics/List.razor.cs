@@ -1,18 +1,18 @@
 ﻿using Microsoft.JSInterop;
-using static Mimic.Web.Features.Topics.ListItemResponse;
+using static Mimic.Web.Features.Topics.ListTopicResponse;
 
 namespace Mimic.Web.Features.Topics;
 
 public partial class List : IDisposable
 {
-    [Inject] private IRepository<Topic> ItemRepository { get; set; } = null!;
+    [Inject] private IRepository<Topic> TopicRepository { get; set; } = null!;
     [Inject] private IConfirmDialogService ConfirmDialogService { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 
     private readonly CancellationTokenSource _cts = new();
     private bool _showAddForm = false;
-    private ListItemResponse? _result;
+    private ListTopicResponse? _result;
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,7 +27,7 @@ public partial class List : IDisposable
 
     private async Task OnCopyClickAsync(string id)
     {
-        var item = await ItemRepository.FindAsync(id, _cts.Token);
+        var item = await TopicRepository.FindAsync(id, _cts.Token);
 
         Snackbar.Add("Copied topic body into clipboard.", Severity.Info);
 
@@ -37,21 +37,21 @@ public partial class List : IDisposable
     private async Task LoadDataAsync()
     {
         _result = null;
-        var items = await ItemRepository.GetAllAsync(_cts.Token);
+        var topics = await TopicRepository.GetAllAsync(_cts.Token);
 
-        if (!items.Any()) return;
+        if (!topics.Any()) return;
 
-        var result = new ListItemResponse();
-        foreach (var item in items)
+        var result = new ListTopicResponse();
+        foreach (var topic in topics)
         {
-            var itemResult = new ItemResponse
+            var topicResponse = new TopicResponse
             {
-                Id = item.Id,
-                Summary = item.Summary,
-                Tags = item.Tags
+                Id = topic.Id,
+                Summary = topic.Summary,
+                Tags = topic.Tags
             };
 
-            result.Items.Add(itemResult);
+            result.Topics.Add(topicResponse);
         }
 
         _result = result;
@@ -61,7 +61,7 @@ public partial class List : IDisposable
     {
         if (await ConfirmDialogService.IsCancelledAsync()) return;
 
-        await ItemRepository.RemoveAsync(id, _cts.Token);
+        await TopicRepository.RemoveAsync(id, _cts.Token);
 
         Snackbar.Add("Successfully removed item!", Severity.Success);
 
@@ -75,15 +75,15 @@ public partial class List : IDisposable
     }
 }
 
-public class ListItemResponse
+public class ListTopicResponse
 {
-    public List<ItemResponse> Items { get; set; } = new();
+    public List<TopicResponse> Topics { get; set; } = new();
 
-    public class ItemResponse
+    public class TopicResponse
     {
         public string Id { get; set; } = null!;
         public string Summary { get; set; } = null!;
-        public string[]? Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
         public bool ShowDetails { get; set; }
     }
 }
