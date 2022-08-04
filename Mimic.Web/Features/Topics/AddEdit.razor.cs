@@ -42,7 +42,7 @@ public partial class AddEdit
 public class AddEditTopicRequest
 {
     [Required]
-    public string Topic { get; set; }
+    public string Summary { get; set; }
     [Required]
     public string Body { get; set; }
     public string Tags { get; set; }
