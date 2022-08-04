@@ -1,28 +1,4 @@
-name: .NET
-
-on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-      - '**/README.md'
-
-concurrency: 
-  group: ${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4.4.0
-      with:
-        folder: drop/wwwroot
-        
 name: Deploy static content to Pages
-
 
 on:
   push:
