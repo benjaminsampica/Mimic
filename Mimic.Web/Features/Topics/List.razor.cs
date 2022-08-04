@@ -47,7 +47,7 @@ public partial class List : IDisposable
             var itemResult = new ItemResponse
             {
                 Id = item.Id,
-                Summary = item.Name,
+                Summary = item.Summary,
                 Tags = item.Tags
             };
 
