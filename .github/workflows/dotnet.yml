@@ -25,7 +25,13 @@ jobs:
       run: dotnet restore
     - name: Publish
       run: dotnet publish -c Release -o 'drop'
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4.4.0
+    - name: Setup Pages
+      uses: actions/configure-pages@v1
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
       with:
-        folder: drop/wwwroot
+        # Upload entire repository
+        path: 'drop/wwwroot'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@main
