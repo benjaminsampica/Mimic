@@ -9,6 +9,9 @@ on:
 concurrency: 
   group: ${{ github.ref }}
   cancel-in-progress: true
+  
+permissions:
+  id-token: write
 
 jobs:
   build-and-deploy:
