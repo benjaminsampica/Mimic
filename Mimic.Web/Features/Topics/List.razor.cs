@@ -14,6 +14,7 @@ public partial class List : IDisposable
     private bool _showAddForm = false;
     private TopicListResponse? _result;
     private MudDropContainer<TopicResponse> _topicDropContainer = null!;
+    private string? _searchValue = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,6 +52,13 @@ public partial class List : IDisposable
         var result = new TopicListResponse();
         foreach (var topic in topics.OrderBy(t => t.Order))
         {
+            if (!string.IsNullOrWhiteSpace(_searchValue))
+            {
+                var topicSearchValue = topic.Summary + topic.Body + string.Join(string.Empty, topic.Tags);
+
+                if (!topicSearchValue.Contains(_searchValue)) continue;
+            }
+
             var topicResponse = new TopicResponse
             {
                 Id = topic.Id,
@@ -85,6 +93,12 @@ public partial class List : IDisposable
         item.Order = dropInfo.IndexInZone;
         await TopicRepository.AddAsync(item, _cts.Token);
 
+        await LoadDataAsync();
+    }
+
+    private async Task OnSearchChangedAsync(string searchValue)
+    {
+        _searchValue = searchValue;
         await LoadDataAsync();
     }
 
