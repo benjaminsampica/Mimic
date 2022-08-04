@@ -29,7 +29,7 @@ public partial class Edit : IDisposable
         await TopicRepository.RemoveAsync(Id, _cts.Token);
         await TopicRepository.AddAsync(topic, _cts.Token);
 
-        Snackbar.Add("Successfully edited item!", Severity.Success);
+        Snackbar.Add("Successfully edited topic!", Severity.Success);
 
         await OnSuccessfulSubmit.InvokeAsync();
     }
