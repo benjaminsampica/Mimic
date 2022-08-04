@@ -12,6 +12,7 @@ concurrency:
   
 permissions:
   id-token: write
+  pages: write
 
 jobs:
   build-and-deploy:
