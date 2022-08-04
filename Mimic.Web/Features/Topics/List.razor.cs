@@ -83,7 +83,7 @@ public class ListItemResponse
     {
         public string Id { get; set; } = null!;
         public string Summary { get; set; } = null!;
-        public string[] Tags { get; set; } = null!;
+        public string[]? Tags { get; set; }
         public bool ShowDetails { get; set; }
     }
 }
