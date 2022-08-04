@@ -9,13 +9,6 @@ on:
 concurrency: 
   group: ${{ github.ref }}
   cancel-in-progress: true
-  
-permissions:
-  id-token: write
-  pages: write
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-and-deploy:
@@ -32,11 +25,7 @@ jobs:
       run: dotnet restore
     - name: Publish
       run: dotnet publish -c Release -o 'drop'
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
-      with:
-        # Upload entire repository
-        path: 'drop/wwwroot'
     - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@main
+      uses: JamesIves/github-pages-deploy-action@v4.4.0
+      with:
+        folder: drop/wwwroot
