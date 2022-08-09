@@ -40,16 +40,6 @@
                 <MudDropContainer T="TopicResponse" Items="@_result.Topics" ItemsSelector="@((item, dropzone) => true)" ItemDropped="OrderUpdatedAsync" @ref=_topicDropContainer>
 		            <ChildContent>
                         <MudGrid>
-                            <MudItem xs="2">
-                                <MudText Typo="Typo.h6">
-                                    Actions
-                                </MudText>
-                            </MudItem>
-                            <MudItem xs="10">
-                                <MudText Typo="Typo.h6">
-                                    Summary
-                                </MudText>
-                            </MudItem>
                             <MudItem xs="12">
                                 <MudDropZone T="TopicResponse" Identifier="1" Class="flex-grow-1" AllowReorder="true" />
                             </MudItem>
@@ -58,21 +48,31 @@
 		            <ItemRenderer>
                         <MudPaper Class="pa-2 my-2">
                             <MudGrid>
-                                <MudItem xs="2">
-                                    <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details" OnClick="() => OnDetailsClick(context)"/>
-                                    <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body" OnClick="() => OnCopyClickAsync(context.Id)"/>
-                                    <MudIconButton Color=Color.Error Icon=@Icons.Outlined.Delete Variant=Variant.Filled OnClick="() => OnRemoveClickAsync(context.Id)" Title="Delete Topic"/>
+                                <MudItem xs="10">
+                                    <MudGrid>
+                                         <MudItem md="2" xs="12" Class="d-flex align-center gap-1">
+                                            <MudIconButton Color=Color.Primary Icon=@Icons.Outlined.Edit Variant=Variant.Filled Title="Open Details" OnClick="() => OnDetailsClick(context)"/>
+                                            <MudIconButton Color=Color.Dark Icon=@Icons.Outlined.ContentCopy Variant=Variant.Filled Title="Copy Body" OnClick="() => OnCopyClickAsync(context.Id)"/>
+                                            <MudIconButton Color=Color.Error Icon=@Icons.Outlined.Delete Variant=Variant.Filled OnClick="() => OnRemoveClickAsync(context.Id)" Title="Delete Topic"/>
+                                        </MudItem>
+                                        <MudItem xs="10">
+                                            <MudText Typo="Typo.body1" Class="pl-1">
+                                                @context.Summary
+                                            </MudText>
+                                            <MudText Typo="Typo.body2">
+                                                @foreach (var tag in context.Tags)
+                                                {
+                                                    <MudChip Color=Color.Info Size=Size.Small>
+                                                        @tag
+                                                    </MudChip>
+                                                }
+                                            </MudText>
+
+                                        </MudItem>
+                                    </MudGrid>
                                 </MudItem>
-                                <MudItem xs="10" Class="d-flex align-center">
-                                    @context.Summary
-                                    @foreach (var tag in context.Tags)
-                                    {
-                                        <MudChip Color=Color.Info Size=Size.Small>
-                                            @tag
-                                        </MudChip>
-                                    }
-                                    <MudSpacer />
-                                    <MudIcon Icon="@Icons.Filled.DragIndicator" Size="Size.Large" Color="Color.Dark"/>
+                                <MudItem xs="2" Class="d-flex justify-end align-center">
+                                    <MudIcon Icon="@Icons.Filled.DragIndicator" Size="Size.Large" Color="Color.Dark" Style="opacity: 60%;"/>
                                 </MudItem>
                                 @if(context.ShowDetails)
                                 {
