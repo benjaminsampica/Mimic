@@ -20,3 +20,10 @@
     height: auto;
     max-width: 400px;
 }
+
+.loading-progress-text:after {
+    content: var(--blazor-load-percentage-text);
+    color: rgba(89,74,226,1);
+    font-weight: bold;
+    font-size: 60px;
+}
